@@ -25,7 +25,7 @@ Data source : https://www.ods.org.hn
   
     c. Past problem: Wont use the directory's path -> Solution: Read files in the scrip's directory.
    
-    d. Possible Upgrades: Change of module of library, use paths propperly. 
+    d. Possible Upgrades: Convert into a API. 
   
 3. Data Analysis: 
 

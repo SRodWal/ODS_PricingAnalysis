@@ -11,80 +11,35 @@ import numpy as np
 import seaborn as sb
 import matplotlib.pyplot as plt
 from matplotlib.legend_handler import HandlerLine2D
-####### Leer archivos en carpeta de datos
-
-files = [f for f in os.listdir('.') if os.path.isfile(f)]
-folderdir = "Desktop/Documents/Work/ODS Price analysis/Data"
-filetype = ".xlsx"
-mypath = folderdir+"/**/*"+filetype
-
-names = []
-for f in files:
-    if filetype in f:
-        names.append(f)
-
-
-######### Definimos variables
-#Meses de estudio: Enero, Febrero y Marzo (2021)
-weeks = [5,4,4,5]
-month = [12,1,2,3]
+#######
 def monthNum(num):
-    return {1 : "Ene21", 2:"Feb21",3:"Mar21",12:"Dic20"}[num]
+    return {1:"Enero",2:"Febrero",3:"Marzo",4:"Abril",5:"Mayo",6:"Junio",7:"Julio",
+            8:"Agosto",9:"Septiembre",10:"Octubre",11:"Noviembre",12:"Diciembre"}[num]
 
-filenames = []
-for w,m in zip(weeks,month):
-    for l in range(1,w+1):
-        name = "Data/CM_"+monthNum(m)+"_S"+str(l)+".xlsx"
-        filenames.append(name)
-    
-dfs = []
-master_dfs = []
-k=0
-for file in filenames:
-    df = pd.read_excel(file)
-    df.drop(labels = 0, axis=0, inplace = True)
-    if file==filenames[0]:
-        dfs=df.drop(labels = df.columns[0], axis=1, inplace = False)
-    else:
-        dfs = dfs.append(df.drop(labels = df.columns[0], axis=1, inplace = False), ignore_index = True)
-    master_dfs.append(df)    
- 
-for name in dfs.columns:
-    df = dfs[name]
-    df = pd.to_numeric(df, errors = "coerce")
-    dfs[name] = df
- 
-############ Price Distribution ###############
-#for name in dfs.columns:
-#    plt.figure(figsize = (10,8))
-#    plt.title("Distribucion "+name+" N="+str(dfs[name].describe().loc[["count"]][0]) )
-#    sb.distplot(dfs[name])
-#    plt.show()
-    
-#statdat = dfs.describe().T
-#statdat.to_excel("Global Review.xlsx")
 
-#Generar el vector de tiempo
-timevec = []
-weekvec = [[dfs.head(0) for i in range(24)] for i in range(7)]
-dayvec = [dfs.head(0) for i in range(24)]
-for df in master_dfs:
-    n = df.columns[0]
-    timevec.extend(df[n])
-    
-####### Analisis por semana #########
-k=0
-for t, row in zip(timevec ,dfs.loc):
-     day = t.weekday()
-     hour = t.hour
-     weekvec[day][hour]=weekvec[day][hour].append(row)
-     dayvec[hour] = dayvec[hour].append(row)
+####### Leer archivos en carpeta de datos
+folderdir = os.getcwd()+"\\Data"
+filetype = ".xlsx"
+files = [f for f in os.listdir(folderdir) if "CM" in f]
 
-price_week = dfs.head(0)
-price_hour = dfs.head(0)
-for i in range(7):
-    for j in range(24):
-        price_week = price_week.append(weekvec[i][j].describe().loc[['mean']])
-        
-for i in range(24):
-    price_hour = price_hour.append(dayvec[i].describe().loc[['mean']])
+######## Ordenar archivos por fecha e importar archivos
+yrs = [19,20,21]
+names = []
+for y in yrs:
+    bag = [f for f in files if str(y) in f]
+    for m in range(1,13):
+        names.extend([f for f in bag if monthNum(m) in f])
+dfs = pd.DataFrame()
+dfs_store = []
+for f in names:
+    df = pd.read_excel("Data/"+f)
+    df = df.rename(columns = {df.columns[0]: 'Time'})
+    if df.loc[0][3]=="$/MWh":
+        df.drop(index = 0, axis = 0, inplace = True)       
+    dfs = dfs.append(df, ignore_index = True)
+
+for name in dfs.columns[1:len(dfs.columns)]:
+    dfs[name] = dfs[name].astype(float)
+#### Hora inicial de estudio Primero de junio del 19
+t0 = datetime.datetime(2019, 6, 1)
+    

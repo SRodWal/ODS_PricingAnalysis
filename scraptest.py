@@ -3,8 +3,7 @@ from urllib.request import urlopen
 from time import sleep
 import re, os
 import webbrowser
-## "https://www.ods.org.hn/index.php/informes/costes-marginales/costosmarginales2019",
-ODSurl = [
+ODSurl = ["https://www.ods.org.hn/index.php/informes/costes-marginales/costosmarginales2019",
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/enero",
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/febrero",
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/marzocostosmarginales2020",

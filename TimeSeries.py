@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import pandas as pd
 import datetime, os, calendar
 import numpy as np
@@ -42,5 +43,50 @@ for i in range(1,len(dfs)):
 dfs["Time"] = timevec  
 dfs = dfs.set_index("Time")    
 ###### Definicion de plantas
-planta = 51
+site = dfs.columns[50] # Guaymas
 
+###### Series de tiempo
+dfs["Año"] = dfs.index.year
+dfs["Mensual"] = dfs.index.month
+dfs["Mes por dia"] = dfs.index.day
+dfs["Semana por dia"] = dfs.index.weekday
+dfs["Por hora"] = dfs.index.hour
+
+# Graficas
+plt.figure(num = 1, figsize = (12, 6))
+dfs[dfs.columns[50]].plot(marker='.', alpha=0.2, figsize=(12, 6))
+plt.ylabel("Precios $/MWh")
+plt.xlabel("Tiempo")
+plt.title("Costos Marginales - Guaymas")
+plt.show()
+
+plt.figure(num = 2, figsize = (10, 6))
+sb.boxplot(data = dfs, x = 'Año', y = dfs.columns[50])
+plt.title("Costos Marignales Promedio Anuales")
+plt.show()
+
+datype = ["Mensual", "Mes por dia", "Semana por dia", "Por hora"]
+for tp, num in zip(datype, range(1,len(datype)+1)):
+    plt.figure(num = num, figsize = (10,6))
+    plt.title("Comparacion de CM "+tp+": 2020 vs 2021")
+    sb.lineplot(data = dfs.loc["2020-01":"2020-12"], x = tp, y = site, markers=True, dashes=False)
+    sb.scatterplot(data = dfs.loc["2020-01":"2020-12"], x = tp, y = site, alpha = 0.1)
+    sb.lineplot(data = dfs.loc["2021-01":"2021-12"], x = tp, y = site, markers=True, dashes=False)
+    sb.scatterplot(data = dfs.loc["2021-01":"2021-12"], x = tp, y = site, alpha = 0.1)
+    plt.legend(["2020","2021"])
+    plt.show()
+
+for tp, num in zip(datype, range(1,len(datype)+1)):
+    plt.figure(num = num, figsize = (10,6))
+    plt.title("Promedio CM Global "+tp)
+    sb.lineplot(data = dfs.loc["2020-01":"2021-12"], x = tp, y = site, markers=True, dashes=False)
+    sb.scatterplot(data = dfs.loc["2020-01":"2021-12"], x = tp, y = site, alpha = 0.1)
+    plt.show()
+
+plt.figure(num = 10, figsize = (10,6))
+plt.title("Distribucion de precios")
+sb.distplot(dfs[site].loc["2019-1":"2019-12"])
+sb.distplot(dfs[site].loc["2020-1":"2020-12"])
+sb.distplot(dfs[site].loc["2021-1":"2021-12"])
+plt.legend(["2019","2020","2021"])
+plt.show()

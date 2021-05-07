@@ -42,4 +42,33 @@ for name in dfs.columns[1:len(dfs.columns)]:
     dfs[name] = dfs[name].astype(float)
 #### Hora inicial de estudio Primero de junio del 19
 t0 = datetime.datetime(2019, 6, 1)
+timevec = [t0]
+for i in range(1,len(dfs)):
+    timevec.append(timevec[-1]+datetime.timedelta(hours = 1))
+dfs["Time"] = timevec  
     
+###### Definicion de plantas
+planta = 51
+
+###### Series de tiempo
+###### statdat[Tipo de dato - mean, std min/max][serie de tiempo - ]
+emptydf = pd.DataFrame()
+statsdata = [] 
+stats = ["mean","std",["min","max"]]  
+weekvec = [emptydf for i in range(0,7)]
+weeklyvec = [emptydf for i in range(0,54)]
+dayvec = [emptydf for i in range(0,31)]
+monthvec = [emptydf for i in range(0,12)]
+hourvec = [emptydf for i in range(0,24)]
+pool = [weekvec, weeklyvec,dayvec,monthvec,hourvec]
+for t,i in zip(timevec, range(0,len(timevec))):
+    weekvec[t.weekday()-1] = weekvec[t.weekday()-1].append(dfs.loc[i])
+    weeklyvec[t.isocalendar()[1]] = weeklyvec[t.isocalendar()[1]].append(dfs.loc[i])
+    dayvec[t.day-1] = dayvec[t.day-1].append(dfs.loc[i])
+    monthvec[t.month-1] = monthvec[t.month-1].append(dfs.loc[i])
+    hourvec[t.hour] = hourvec[t.hour].append(dfs.loc[i])
+    
+poollis = [[df.describe() for df in dat if not(df.empty)] for dat in pool]    
+statdat = [[] for i in range(0,len(stats))]
+for s, dat in zip(stats, statdat):
+    [dat.append([df.loc[s] for df in lis]) for lis in poollis]

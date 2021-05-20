@@ -19,8 +19,10 @@ ODSurl = ["https://www.ods.org.hn/index.php/informes/costes-marginales/costosmar
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/enero21-costosmarginales",
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/febrero21-costosmarginales",
           "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/marzo21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/abril21-costosmarginales"       
+          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/abril21-costosmarginales",
+          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/mayo21-costosmarginales"
           ]
+ODSurl=ODSurl[len(ODSurl)-1:len(ODSurl)] # Updates last month
 #List of webpages to search
 Meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
 #This will order the month list to correspond the ODS links.

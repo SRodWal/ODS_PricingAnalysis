@@ -43,7 +43,8 @@ for i in range(1,len(dfs)):
 dfs["Time"] = timevec  
 dfs = dfs.set_index("Time")    
 ###### Definicion de plantas
-site = dfs.columns[50] # Guaymas
+#site = dfs.columns[50] # Guaymas
+site = dfs.columns[64] #Guaimaca
 
 ###### Series de tiempo
 dfs["Año"] = dfs.index.year
@@ -57,7 +58,7 @@ plt.figure(num = 1, figsize = (12, 6))
 dfs[dfs.columns[50]].plot(marker='.', alpha=0.2, figsize=(12, 6))
 plt.ylabel("Precios $/MWh")
 plt.xlabel("Tiempo")
-plt.title("Costos Marginales - Guaymas")
+plt.title("Costos Marginales - "+site)
 plt.show()
 
 plt.figure(num = 2, figsize = (10, 6))

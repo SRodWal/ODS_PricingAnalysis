@@ -92,3 +92,6 @@ sb.distplot(dfs[site].loc["2020-1":"2020-12"])
 sb.distplot(dfs[site].loc["2021-1":"2021-12"])
 plt.legend(["2019","2020","2021"])
 plt.show()
+
+##### Estudio de eventos anomalos
+

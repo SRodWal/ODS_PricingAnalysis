@@ -70,12 +70,14 @@ plt.show()
 datype = ["Mensual", "Mes por dia", "Semana por dia", "Por hora"]
 for tp, num in zip(datype, range(1,len(datype)+1)):
     plt.figure(num = num, figsize = (10,6))
-    plt.title("Comparacion de CM "+tp+": 2020 vs 2021")
+    plt.title("Comparacion de CM "+tp+":2019 vs 2020 vs 2021")
+    sb.lineplot(data = dfs.loc["2019-01":"2019-12"], x = tp, y = site, markers=True, dashes=False)
+    sb.scatterplot(data = dfs.loc["2019-01":"2019-12"], x = tp, y = site, alpha = 0.1)
     sb.lineplot(data = dfs.loc["2020-01":"2020-12"], x = tp, y = site, markers=True, dashes=False)
     sb.scatterplot(data = dfs.loc["2020-01":"2020-12"], x = tp, y = site, alpha = 0.1)
     sb.lineplot(data = dfs.loc["2021-01":"2021-12"], x = tp, y = site, markers=True, dashes=False)
     sb.scatterplot(data = dfs.loc["2021-01":"2021-12"], x = tp, y = site, alpha = 0.1)
-    plt.legend(["2020","2021"])
+    plt.legend(["2019","2020","2021"])
     plt.show()
 
 for tp, num in zip(datype, range(1,len(datype)+1)):
@@ -93,5 +95,11 @@ sb.distplot(dfs[site].loc["2021-1":"2021-12"])
 plt.legend(["2019","2020","2021"])
 plt.show()
 
-##### Estudio de eventos anomalos
+##### Pronostico de precio nodal diario 
+pt0 = datetime.datetime(2022,1,1)
+ptimevec = [pt0]
+[ptimevec.append(ptimevec[-1] + datetime.timedelta(hours= 1)) for n in range(0,365*24) if ptimevec[-1]<datetime.datetime(2022,12,31,23)]
+df19 = dfs[site].loc["2019"]
+df21 = dfs[site].loc["2021"]
+
 

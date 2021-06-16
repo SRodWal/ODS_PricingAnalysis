@@ -83,8 +83,8 @@ for tp, num in zip(datype, range(1,len(datype)+1)):
 for tp, num in zip(datype, range(1,len(datype)+1)):
     plt.figure(num = num, figsize = (10,6))
     plt.title("Promedio CM Global "+tp)
-    sb.lineplot(data = dfs.loc["2020-01":"2021-12"], x = tp, y = site, markers=True, dashes=False)
-    sb.scatterplot(data = dfs.loc["2020-01":"2021-12"], x = tp, y = site, alpha = 0.1)
+    sb.lineplot(data = dfs.loc["2019-01":"2021-12"], x = tp, y = site, markers=True, dashes=False)
+    sb.scatterplot(data = dfs.loc["2019-01":"2021-12"], x = tp, y = site, alpha = 0.025)
     plt.show()
 
 plt.figure(num = 10, figsize = (10,6))
@@ -99,7 +99,29 @@ plt.show()
 pt0 = datetime.datetime(2022,1,1)
 ptimevec = [pt0]
 [ptimevec.append(ptimevec[-1] + datetime.timedelta(hours= 1)) for n in range(0,365*24) if ptimevec[-1]<datetime.datetime(2022,12,31,23)]
-df19 = dfs[site].loc["2019"]
-df21 = dfs[site].loc["2021"]
+df19 = dfs[[site,"Por hora"]].loc["2019"]
+df21 = dfs[[site,"Por hora"]].loc["2021"]
+pdf = df19.append(df21)
+
+predictarray = np.array(dfs[[site,"Por hora"]].loc["2019":"2021"])
+daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
+daystd = [np.std([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
+plt.figure(num = 11, figsize = (10,6))
+plt.title("Perfil de CM diario - pronosticado")
+plt.xlabel("Horas")
+plt.ylabel("Costos Marginales [USD/MWh]")
+plt.plot(daypow)
+plt.fill_between(range(0,24),[x-s for x,s in zip(daypow, daystd)],[x+s for x,s in zip(daypow, daystd)], alpha = 0.3 )
+anuCM = []
+anuCMstd = []
+[anuCM.extend(daypow) for n in range(0,365)]
+[anuCMstd.extend(daystd) for n in range(0,365)]
+dfexport = pd.DataFrame()
+dfexport["Time"] = ptimevec
+dfexport["USD/MWh"] = anuCM
+dfexport["CM - STD"] = anuCMstd
+dfexport = dfexport.set_index("Time")
+dfexport.to_excel("CM predictivos diarios.xlsx")
+
 
 

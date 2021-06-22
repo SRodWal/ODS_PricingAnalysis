@@ -103,6 +103,7 @@ df19 = dfs[[site,"Por hora"]].loc["2019"]
 df21 = dfs[[site,"Por hora"]].loc["2021"]
 pdf = df19.append(df21)
 
+#Global
 predictarray = np.array(dfs[[site,"Por hora"]].loc["2019":"2021"])
 daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
 daystd = [np.std([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
@@ -121,7 +122,23 @@ dfexport["Time"] = ptimevec
 dfexport["USD/MWh"] = anuCM
 dfexport["CM - STD"] = anuCMstd
 dfexport = dfexport.set_index("Time")
-dfexport.to_excel("CM predictivos diarios.xlsx")
+#dfexport.to_excel("CM predictivos diarios.xlsx")
 
+##Pre, Durante y Post Pandemia
+predf = dfs[[site,"Por hora"]].loc["2019":"2020-03-11"]
+durdf = dfs[[site,"Por hora"]].loc["2020-03-11":"2021-03"]
+posdf = dfs[[site,"Por hora"]].loc["2021-03":"2021"]
+dfvec = [predf,durdf,posdf]
+Temp = ["Pre-pandemia","Durante pandemia", "Post-pandemia"]
+for df,num,tit in zip(dfvec,range(0,3),Temp):
+    predictarray= np.array(df)
+    daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
+    daystd = [np.std([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)] 
+    plt.figure(num = num, figsize = (10,6))
+    plt.title("Perfil de CM diario - "+tit)
+    plt.xlabel("Horas")
+    plt.ylabel("Costos Marginales [USD/MWh]")
+    plt.plot(daypow)
+    plt.fill_between(range(0,24),[x-s for x,s in zip(daypow, daystd)],[x+s for x,s in zip(daypow, daystd)], alpha = 0.3 )
 
 

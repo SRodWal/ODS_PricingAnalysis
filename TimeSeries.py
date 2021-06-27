@@ -140,5 +140,5 @@ for df,num,tit in zip(dfvec,range(0,3),Temp):
     plt.ylabel("Costos Marginales [USD/MWh]")
     plt.plot(daypow)
     plt.fill_between(range(0,24),[x-s for x,s in zip(daypow, daystd)],[x+s for x,s in zip(daypow, daystd)], alpha = 0.3 )
-
+    plt.legend(["Precio promedio por hora", "Desviacion std. por hora"])
 

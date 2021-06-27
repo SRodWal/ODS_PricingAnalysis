@@ -134,8 +134,8 @@ for df,num,tit in zip(dfvec,range(0,3),Temp):
     predictarray= np.array(df)
     daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
     daystd = [np.std([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)] 
-    plt.figure(num = num, figsize = (10,6))
-    plt.title("Perfil de CM diario - "+tit)
+    plt.figure(num = num, figsize = (10,6), dpi = 300)
+    plt.title("Perfil de CM diario - "+tit+" ( "+df.index[0].strftime("%d/%m/%Y")+" - "+df.index[-1].strftime("%d/%m/%Y")+" )")
     plt.xlabel("Horas")
     plt.ylabel("Costos Marginales [USD/MWh]")
     plt.plot(daypow)

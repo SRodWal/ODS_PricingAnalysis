@@ -128,8 +128,10 @@ dfexport = dfexport.set_index("Time")
 predf = dfs[[site,"Por hora"]].loc["2019":"2020-03-11"]
 durdf = dfs[[site,"Por hora"]].loc["2020-03-11":"2021-03"]
 posdf = dfs[[site,"Por hora"]].loc["2021-03":"2021"]
-dfvec = [predf,durdf,posdf]
-Temp = ["Pre-pandemia","Durante pandemia", "Post-pandemia"]
+sindf = predf.append(posdf)
+dfvec = [predf,durdf,posdf,sindf]
+Temp = ["Pre-pandemia","Durante pandemia", "Post-pandemia","Sin pandemia"]
+perfildf = pd.DataFrame()
 for df,num,tit in zip(dfvec,range(0,3),Temp):
     predictarray= np.array(df)
     daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
@@ -141,4 +143,13 @@ for df,num,tit in zip(dfvec,range(0,3),Temp):
     plt.plot(daypow)
     plt.fill_between(range(0,24),[x-s for x,s in zip(daypow, daystd)],[x+s for x,s in zip(daypow, daystd)], alpha = 0.3 )
     plt.legend(["Precio promedio por hora", "Desviacion std. por hora"])
+    perfildf[tit+" CM"] = daypow
+    perfildf[tit+" std."] = daystd
+
+## Expoertar datos a excel
+from append_df_excel import *
+sheetnames = ["2019 - 2021"]+Temp+["Sin pandemia","Perfiles diarios"]
+dflist = [dfs[site]]+dfvec+[perfildf]
+for sheet, df in zip(sheetnames,dflist):
+    append_df_excel("Resumen de CM.xlsx",df, sheet_name = sheet, startrow = 0, truncate_sheet = False)
 

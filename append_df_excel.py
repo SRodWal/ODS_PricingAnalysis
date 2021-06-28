@@ -4,6 +4,7 @@ This code was uploaded by MaxU on stackoverflow
 URL = https://stackoverflow.com/a/38075046/5741205
 """
 import os
+import pandas as pd
 from openpyxl import load_workbook
 
 

@@ -132,7 +132,7 @@ sindf = predf.append(posdf)
 dfvec = [predf,durdf,posdf,sindf]
 Temp = ["Pre-pandemia","Durante pandemia", "Post-pandemia","Sin pandemia"]
 perfildf = pd.DataFrame()
-for df,num,tit in zip(dfvec,range(0,3),Temp):
+for df,num,tit in zip(dfvec,range(0,len(Temp)),Temp):
     predictarray= np.array(df)
     daypow = [np.mean([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)]
     daystd = [np.std([p[0] for p in predictarray if n==p[1]]) for n in range(0,24)] 

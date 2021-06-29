@@ -148,8 +148,8 @@ for df,num,tit in zip(dfvec,range(0,3),Temp):
 
 ## Expoertar datos a excel
 from append_df_excel import *
-sheetnames = ["2019 - 2021"]+Temp+["Sin pandemia","Perfiles diarios"]
+sheetnames = ["2019 - 2021"]+Temp+["Perfiles diarios"]
 dflist = [dfs[site]]+dfvec+[perfildf]
 for sheet, df in zip(sheetnames,dflist):
-    append_df_excel("Resumen de CM.xlsx",df, sheet_name = sheet, startrow = 0, truncate_sheet = False)
+    append_df_to_excel("Resumen de CM.xlsx",df, sheet_name = sheet, startrow = 0, truncate_sheet = False)
 

@@ -3,26 +3,13 @@ from urllib.request import urlopen
 from time import sleep
 import re, os
 import webbrowser
-ODSurl = ["https://www.ods.org.hn/index.php/informes/costes-marginales/costosmarginales2019",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/enero",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/febrero",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/marzocostosmarginales2020",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/abrilcostosmarginales2020",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/mayo",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/junio",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/julio",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/agosto",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/septiembre",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/octubre-cm20",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/noviembre-cm20",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2020/diciembrecostosm2020",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/enero21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/febrero21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/marzo21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/abril21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/mayo21-costosmarginales",
-          "https://www.ods.org.hn/index.php/informes/costes-marginales/2021-costomarginales/junio21-costosmarginales-2"
-          ]
+
+#Import data sources:
+s_dir = os.getcwd()
+fileloc = [f for f in os.listdir(s_dir) if "ODS" in f][0]
+urllist = open(s_dir+"\\"+fileloc).readlines()
+ODSurl = [f.replace("\n","").replace(" ","") for f in urllist]
+
 ODSurl=ODSurl[len(ODSurl)-2:len(ODSurl)] # Updates last two month
 #List of webpages to search
 Meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
